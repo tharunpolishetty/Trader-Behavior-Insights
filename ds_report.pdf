@@ -1,1 +1,47 @@
+"""
+1. Introduction<br/>
+This report analyzes how trader behavior (profitability, volume, direction bias, and volume)
+changes across different market sentiment regimes using Hyperliquid historical trade data and
+the Crypto Fear & Greed Index (Extreme Fear, Fear, Neutral, Greed, Extreme Greed).
 
+2. Data Preparation<br/>
+- Parsed the Timestamp IST column into a proper datetime and derived a trade_date field.<br/>
+- Parsed the sentiment date column and derived a sentiment_date field.<br/>
+- Merged trade data with sentiment on date to assign a sentiment label to every trade.
+
+3. Feature Engineering<br/>
+- Created a profitability flag is_profitable from Closed PnL (> 0).<br/>
+- Encoded trade side as side_numeric (BUY = 1, SELL = -1).<br/>
+- Aggregated daily metrics by (trade_date, classification):<br/>
+  • Daily PnL (sum and mean)<br/>
+  • Daily trading volume (Size USD)<br/>
+  • Daily win rate (mean of is_profitable)<br/>
+  • Long/short bias (mean of side_numeric)
+
+4. Key Insights<br/>
+- Win Rate: The average daily win rate is highest during Extreme Greed days, indicating that
+strong bullish sentiment tends to coincide with more favorable trading conditions and clearer
+trends.<br/>
+- Volume: Trading volume (Size USD) is highest during Extreme Fear and Fear, suggesting
+that traders become most active during periods of uncertainty and heightened volatility.<br/>
+- PnL: The best PnL environments are generally observed at sentiment extremes (Extreme Fear
+and Extreme Greed), while Neutral and moderate Greed show weaker performance and lower
+activity.<br/>
+- Direction Bias: There is a noticeable short bias during Extreme Greed, which may indicate
+that traders hedge or fade overly optimistic moves. During Fear/Extreme Fear, traders often
+follow the trend but with mixed long/short behavior depending on conditions.
+
+5. Conclusions & Strategy Implications<br/>
+- Sentiment extremes (Extreme Fear and Extreme Greed) are the most informative regimes for
+active trading strategies, offering both volatility and edge in PnL and win rate.<br/>
+- Neutral and moderate Greed regimes can be considered low-opportunity environments with
+relatively weaker performance and lower volume.<br/>
+- A sentiment-aware trading system could dynamically adjust risk and position sizing based on
+the current sentiment regime:<br/>
+  • Scale up risk during Extreme Fear/Extreme Greed (with strict risk controls).<br/>
+  • Scale down or avoid trading during Neutral periods.<br/>
+  • Monitor short build-up during Extreme Greed as a potential signal for mean reversion.
+
+The accompanying notebooks, CSV outputs, and Seaborn charts (saved in the outputs/ folder)
+provide full details of the implementation steps and visual analysis.
+"""
